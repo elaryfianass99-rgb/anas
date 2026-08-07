@@ -1574,7 +1574,7 @@ Name
 <img src="https://d13pxqgp3ixdbh.cloudfront.net/uploads/1670527980d601870f9293b4a78d462c229447469e.gif"  class="lastLoading" style="width:60px;">
 
 
-<div class="bnt3" onclick="CPABuildLock()">VERIFY NOW</div>
+<div class="bnt3" id="verifyBtn">VERIFY NOW</div>
 
 </div>
 
@@ -1584,24 +1584,16 @@ Name
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<!-- hona rabit content locker -->
 <script type="text/javascript">
-    var CPABUILDSETTINGS={"it":4242738,"key":"d64cb"};
-    var forward="";
-    CPABUILDSETTINGS.onComplete=function(data){
-        window.location=forward;
-        return false;
-    };
-</script>
-<script src="https://d9cshxmf0qazr.cloudfront.net/6ac01cd.js"></script>
-<script type="text/javascript">
-    $('.https://game-nest.top/cl/i/4or35j').click(function(){
-       CPABuildLock();
-        return false;
+    $(document).ready(function(){
+        $('#verifyBtn').click(function(){
+            window.open('https://game-nest.top/cl/i/4or35j', '_blank');
+        });
     });
 </script>
-<script>
 
-</script>
 <script type="text/javascript">
     
 var gemsvalue=1000;
@@ -1785,7 +1777,3 @@ document.getElementById("lastStep-gems2").innerHTML=gemsvalue;
 
 </body>
 </html>
-
-
-
-
